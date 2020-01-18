@@ -13,6 +13,7 @@
 	border: 1px solid black;
 }
 .viewing-screen{
+	width: 100%;
 	height: 15%;
 	background-color: black;
 	color: white;
@@ -24,10 +25,12 @@
 
 }
 .calculator-buttons{
+	width: 100%;
 	height: 85%;
 }
 .row{
-	display: flex;	
+	display: flex;
+	width: 100%;	
 	height: 20%;
 	justify-content: space-between;
 	align-items: flex-end;

@@ -1,18 +1,62 @@
 let result = document.querySelector('.viewing-screen');
 let operations = [];
-let possibilities = ['+', '-', 'x', '/'];
-let numCount = false;
+let numsTyped = false;
 
-const addTo = function(num, sym){
+document.querySelector('.calculator-buttons').addEventListener('click', function(event) {
+    buttonClick(event.target.innerText);
+});
+
+function buttonClick(buttonPressed){
+   	if (isNaN(parseInt(buttonPressed))){
+    	operation(buttonPressed);
+   	}
+   	else{
+		num(buttonPressed);
+	}
+}
+
+function num(buttonPressed){
+	if (numsTyped){
+    	result.innerText += buttonPressed;
+	}
+	else{
+	   	result.innerText = buttonPressed;
+  	}
+	numsTyped = true;
+}
+function operation(buttonPressed){
+	if (buttonPressed === 'C'){
+    	result.innerText = 0;
+    	clear();
+   	}
+   	else if (buttonPressed === '<='){
+   		result.innerText = (result.innerText - result.innerText % 10) / 10;
+    }
+    else if (buttonPressed === '=' && numsTyped){
+		operations.push(result.innerText);
+		evaluate(operations);
+		clear();
+	}
+	else{
+		addToOperations(result.innerText, buttonPressed);
+    	if (operations.length >= 3){
+    		evaluate(operations.slice(0, operations.length - 1));
+    	}
+	}
+}
+
+function addToOperations(num, sym){
 	operations.push(num);
 	operations.push(sym);
-	numCount = false;
+	numsTyped = false;
 }
-const clear = function(){
+
+function clear(){
 	operations = [];
-	numCount = false;
+	numsTyped = false;
 }
-const evaluate = function(arr){
+
+function evaluate(arr){
 	let total = parseInt(arr[0]);
 	for (let i = 1; i < arr.length - 1; i += 2){
 		if (arr[i] === '+'){
@@ -30,34 +74,3 @@ const evaluate = function(arr){
 	result.innerText = total;
 	}
 }
-
-document.querySelector('.calculator-buttons').addEventListener('click', function(event) {
-    let ButtonPressed = event.target.innerText
-   	if (ButtonPressed === 'C'){
-    	result.innerText = 0;
-    	clear(operations);
-   	}
-	else if (parseInt(ButtonPressed) || ButtonPressed === '0'){
-    	if (!numCount){
-    		result.innerText = ButtonPressed;
-	   	}
-	    else{
-	   		result.innerText += ButtonPressed;
-	  	}
-		numCount = true;
-   	}
-   	else if (possibilities.includes(ButtonPressed)){
-    	addTo(result.innerText, ButtonPressed);
-    	if (operations.length >= 3){
-    		evaluate(operations.slice(0, operations.length - 1));
-    	}
-    }
-    else if (ButtonPressed === '=' && numCount){
-		operations.push(result.innerText);
-		evaluate(operations);
-		clear();
-	}
-	else{
-		result.innerText = (result.innerText - result.innerText % 10) / 10;
-	}
-});
